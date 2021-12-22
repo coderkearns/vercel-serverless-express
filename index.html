@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Express Serverless Function with Vercel</title>
+    </head>
+    <body>
+        <input id="input" type="text" />
+        <h1>Hello, <span id="name">${name}</span></h1>
+        <p>
+            This is a simple example of a serverless function written in
+            <a href="https://expressjs.com/">Express</a> with
+            <a href="https://vercel.com/">Vercel</a>.
+        </p>
+        <ul>
+            <li>
+                <code>/api/</code>
+                <p id="api">${api}</p>
+            </li>
+            <li>
+                <code>/api/hello</code>
+                <p id="api-hello">${api-hello}</p>
+            </li>
+            <li>
+                <code>/api/hello/:name</code>
+                <p id="api-hello-name">${api-hello-name}</p>
+            </li>
+            <li>
+                <code>/api/time</code>
+                <p id="api-time">${api-time}</p>
+            </li>
+        </ul>
+        <script>
+            const input = document.getElementById("input");
+            const name = document.getElementById("name");
+            const api = document.getElementById("api");
+            const apiHello = document.getElementById("api-hello");
+            const apiHelloName = document.getElementById("api-hello-name");
+            const apiTime = document.getElementById("api-time");
+
+            let inputValue = "World";
+            input.addEventListener("keyup", () => {
+                inputValue = input.value;
+                name.innerText = inputValue;
+                update();
+            });
+
+            update();
+
+            function update() {
+                getApi();
+                getApiHello();
+                getApiHelloName();
+                getApiTime();
+            }
+
+            function getApi() {
+                fetch("/api/")
+                    .then(res => res.json())
+                    .then(data => {
+                        api.innerText = data;
+                    });
+            }
+
+            function getApiHello() {
+                fetch("/api/hello")
+                    .then(res => res.json())
+                    .then(data => {
+                        apiHello.innerText = data;
+                    });
+            }
+
+            function getApiHelloName() {
+                fetch(`/api/hello/${inputValue}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        apiHelloName.innerText = data;
+                    });
+            }
+
+            function getApiTime() {
+                fetch("/api/time")
+                    .then(res => res.json())
+                    .then(data => {
+                        apiTime.innerText = data;
+                    });
+            }
+        </script>
+    </body>
+</html>
